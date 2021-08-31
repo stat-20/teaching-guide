@@ -333,7 +333,6 @@ ggplot(arbuthnot, aes(x = year, y = p_boys)) +
 --
 
 ```{r ref.label = "q3b"}
-
 ```
 
 
