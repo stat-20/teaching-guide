@@ -30,9 +30,15 @@ class: center, middle, inverse, title-slide
 
 # R Skills
 - Selecting variables from a data frame with `select()`
-- Creating and saving new variables using `mutate()`
+- Creating new variables using `mutate()` and saving them
 - Building and modifying a plot using `ggplot()`
-- Linking functions with a pipe `%&gt;%`,
+- Linking functions with a pipe `%&gt;%`
+
+# Suggested timeline
+- [5 - 10 min] Introduce question and data using slides
+- [15 min] Allow students to read the instructions and work on their own or together while you walk around and answer questions
+- [10 min] Come back together as a class and check in on answers to first three questions and address main questions/issues that came up
+- [15 min] Allow them to continue working on the remaining questions, walking around and answering questions and bringing the class together for check-ins when useful
 
 # General advice
 - Students are still very new to computing, so be sure to verbalize several things you may take for granted
@@ -190,6 +196,118 @@ Use Arbuthnot's data to answer: "What is the chance that a child born tomorrow i
 At this point, you can set students loose to work you'll want to monitor their progress and check-in several times throughout the hour. Some suggested check-ins are below. The answers to the first three problems are in the slides, but you may also want to do them directly in a new Rmd and project that just to show students what your Rmd looks like (namely, that it contains only code and answers to the questions, not the intermediate code used throughout).
 
 ---
+class: middle, center, inverse
+
+# Check-ins
+
+---
+## Question 1
+
+What command would you use to extract just the counts of girls christened?
+
+--
+
+
+```r
+library(tidyverse)
+library(stat20data)
+data(arbuthnot)
+select(arbuthnot, girls)
+```
+
+--
+
+
+```
+## # A tibble: 82 × 1
+##    girls
+##    &lt;int&gt;
+##  1  4683
+##  2  4457
+##  3  4102
+##  4  4590
+##  5  4839
+##  6  4820
+##  7  4928
+##  8  4605
+##  9  4457
+## 10  4952
+## # … with 72 more rows
+```
+
+
+---
+## Question 2
+
+Is there an apparent trend in the number of girls christened over the years? 
+How would you describe it?
+
+.pull-left[
+&lt;img src="02A-intro-to-r-slides_files/figure-html/q2-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+
+--
+
+.pull-right[
+The number of girls generally increased between 1629 and 1710, though there was year-to-year variability and a big decrease between 1640 and 1660.
+]
+
+???
+Does anyone know what was happening in London around this time period that might be causing this drop?
+
+---
+
+&lt;img src="02A-intro-to-r-slides_files/figure-html/q2b-1.png" width="720" style="display: block; margin: auto;" /&gt;
+
+- 1642 - 1651 English Civil War
+- 1665 - 1666 Great Plague of London
+- 1666 Great Fire of London, 80% of city destroyed
+- 1704?
+
+???
+Many of the dips correspond to period of political instability or natural disasters.
+
+---
+## Question 3
+
+Generate a plot of the proportion of boys born over time. What do you see?
+
+--
+
+
+```r
+arbuthnot &lt;- arbuthnot %&gt;%
+  mutate(total = boys + girls) %&gt;%
+  mutate(p_boys = boys / total)
+ggplot(arbuthnot, aes(x = year, y = p_boys)) +
+  geom_line()
+```
+
+---
+## Question 3
+
+
+.pull-left[
+&lt;img src="02A-intro-to-r-slides_files/figure-html/unnamed-chunk-7-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+
+--
+
+.pull-right[
+It appears to be a very erratic trend in the proportion of boys born over time.
+
+&gt; or is it?
+]
+
+---
+
+Same data, same plot, but with the y-axis rescaled.
+
+
+
+--
+
+&lt;img src="02A-intro-to-r-slides_files/figure-html/unnamed-chunk-8-1.png" width="504" style="display: block; margin: auto;" /&gt;
 
 
 
