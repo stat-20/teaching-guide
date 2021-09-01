@@ -1,13 +1,13 @@
-The following redesign will hopefully make the experience of starting with computing as painfree as possible for students, with having them focus on what is most important at the appropriate stage
+The following proposed redesign will hopefully make the experience of starting with computing as pain-free as possible for students, with having them focus on what is most important at the appropriate stage.
 
 
 ### Infrastructure configuration
 
 All of the content and assignments for the course: lecture slides, problem set questions, lab questions, and lab slides are hosted on the course website in polished html form. The source for materials themselves should live in a `stat20-materials` repo that is linked from the course website but not shown to students. The course website itself can be hosted out of a `stat20-website` repo.
 
-Students benefit from not having to create brand new Rmd files for their assignments, particularly in the beginning. One option is to use `nbgitpuller` to sync with a repo that we manage that gives them a `problem-sets` and `labs` directories that we can populate with template Rmds. The other option is to keep those templates in an R package that we pre-install on the server.
+Students benefit from not having to create brand new Rmd files for their assignments, particularly in the beginning. One option is to use `nbgitpuller` to sync with a repo that we manage that gives them a `problem-sets` and `labs` directories that we can populate with template Rmds. The other option is to keep those [templates in an R package](https://rstudio.github.io/rstudio-extensions/rmarkdown_templates.html) that we pre-install on the server.
 
-I'd opt for the latter. nbgitpuller probably seems like some black magic to students (the files just appear!) while they'll be familiar with creating new documents and saving them. It'd also save us the work from having to dribble out the template Rmds to the synced repo and continually asking the students to sync. Best if these templates loaded all of the packages needed for the labs so that we can put an `message = FALSE` option on it and never have to talk with the students about r chunk options (or can at least delay the conversation).
+I'd opt for the latter. nbgitpuller probably seems like some black magic to students (the files just appear!), while by contrast they'll be familiar with creating new documents and saving them. It'd also save us the work from having to dribble out the template Rmds to the synced repo and continually asking the students to sync. Best if these templates loaded all of the packages needed for the labs so that we can put an `message = FALSE` option on it and never have to talk with the students about r chunk options (or can at least delay the conversation).
 
 Teaching guides for the labs can live as presenter notes in the Rmds of the lab slides hosted in `stat20-materials`, so there should be no need for a separate `teaching-guide` repo.
 
@@ -31,6 +31,8 @@ What's the best way to publish html files from `stat20-materials` into `stat20-w
 3. Third teach Rmds with markdown + R as a way to combine the two in a manner that is reproducible.
 
 ### Progression of assignments
+
+The following components will follow one another as ordered here during the first week of class.
 
 **Markdown**
 
