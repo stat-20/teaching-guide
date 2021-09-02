@@ -1,0 +1,309 @@
+---
+title: "The Grammar of Graphics"
+subtitle: "Practice"
+author: "STAT 20 UC Berkeley"
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-forest-light
+      highlightLines: true
+      highlightSpans: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(message = FALSE,
+                      warning = FALSE,
+                      echo = FALSE,
+                      fig.align = "center",
+                      fig.retina = 3)
+
+library(tidyverse)
+library(xaringanthemer)
+source("https://raw.githubusercontent.com/stat-20/stat-20-website/main/xaringan-theme.R")
+ggplot2::theme_set(ggplot2::theme_gray(base_size = 18))
+```
+
+---
+# Agenda
+
+Today you'll get practice applying the Grammar of Graphics framework to data using `ggplot2`.
+
+1. Practice with paper and pencil
+2. Practice with `ggplot2`
+
+???
+# Statistical Concepts
+- 
+
+# R Skills
+
+# Suggested timeline
+- [5 - 10 min] Introduce question and data using slides
+- [15 min] 
+
+# General Advice
+- Before class right the most common geom functions on the board
+  - geom_point()
+  - geom_histogram()
+  - geom_boxplot()
+  - geom_density()
+  - geom_bar()
+  - geom_line()
+
+---
+
+## Grammar of Graphics in R
+
+Wickham 2005: `ggplot2` package (inside `tidyverse`) proposes a general template:
+
+
+```{css, echo = FALSE}
+.huge .remark-code { /*Change made here*/
+  font-size: 150% !important;
+}
+```
+
+.huge[
+```
+ggplot(<data>) +
+    <geom>(<aes(mapping)>)
+```
+]
+
+---
+class: middle, center
+
+### First, with old technology
+
+---
+## Practice Puzzles
+
+1. Please close your computers
+1. Pull out a paper and pencil
+1. Get into pairs (or trios)
+
+You are about to be challenged with two puzzles.
+
+???
+Go around and be sure that every student is paired up, making trios where needed.
+
+---
+### MCU Films (from PS2)
+
+These three plots come from a data set called `mcu_films`. Please write out the `ggplot2` code that will produce each one.
+
+```{r echo = FALSE, message = FALSE, fig.width=11, fig.height=4}
+library(tidyverse)
+library(openintro)
+library(patchwork)
+
+p1 <- ggplot(mcu_films, aes(x = gross_us)) +
+    geom_histogram()
+p2 <- ggplot(mcu_films, aes(y = gross_world)) +
+    geom_boxplot()
+p3 <- ggplot(mcu_films, aes(x = gross_us,
+                            gross_world)) +
+    geom_point()
+p1 + p2 + p3
+```
+
+???
+Give ~5 minutes for this, walking around coaching students that are struggling to write anything down. As you see people with the correct answer for a particular plot, ask if they'd mind writing it on the board in a moment. Once most groups are done, ask those students who you had talked to earlier if they could please write their answers on the board.
+
+Bring up DataHub and, working purely at the console, load the tidyverse, load the openintro package, then transcribe the code on the board to answer the puzzle. Stop and ask for questions.
+
+---
+
+What do you learn from each one?
+
+```{r echo = FALSE, message = FALSE, fig.width=11, fig.height=4}
+p1 + p2 + p3
+```
+
+???
+Answers will vary, but things to point out:
+
+1. Gross US earnings are right skewed. They may note approximate center and IQR / range.
+2. Same for Gross World, although it's shifted right.
+3. There is a positive linear relationship between US and World earnings.
+4. One film did notably poorer abroad than the others - which is that?
+
+---
+## Palmer Penguins
+
+These three plots come from the data set called `penguins`. Please write out the `ggplot2` code that will produce each one.
+
+```{r echo = FALSE, message = FALSE, fig.width=11, fig.height=4}
+library(palmerpenguins)
+p1 <- ggplot(penguins, 
+             aes(x = bill_length_mm)) +
+  geom_density()
+p2 <- ggplot(penguins, 
+             aes(x = species)) +
+  geom_bar()
+p3 <- ggplot(penguins,
+             aes(x = flipper_length_mm,
+                 y = body_mass_g,
+                 color = island)) +
+  geom_point()
+p1 + p2 + p3
+```
+
+???
+Same as the first puzzle, five ~5 minutes for this, then have the students write the correct answers on the board, which you create at the console.
+
+---
+class: middle, center
+
+### And now with computers
+
+???
+You may want to give students ~5  minutes to open their laptops, sync with DataHub, open the Lab 2B template, and fill in their answers for questions 1 and 2.
+
+---
+## Polishing plots by adding layers
+
+You can add complexity and polish to plots by adding on additional layers with `+`.
+
+1. Modifying labels
+2. Add transparency (alpha)
+3. Changing axis limits
+
+--
+
+Let's polish this up:
+
+```{r fig.height = 3, fig.width=3}
+ggplot(mcu_films, 
+       aes(x = gross_us,
+           y = gross_world)) +
+  geom_point()
+```
+
+
+---
+## Modifying labels
+
+You can modify axis, legend, and plot labels by adding a `labs()` layer.
+
+--
+
+.pull-left[
+```{r lay-labs, echo = TRUE, eval = FALSE}
+ggplot(mcu_films, 
+       aes(x = gross_us,
+           y = gross_world)) +
+  geom_point() +
+  labs(x = "Gross US", #<<
+       y = "Gross World", #<<
+       title = "MCU Revenue") #<<
+```
+]
+
+--
+
+.pull-right[
+```{r ref.label="lay-labs", echo = FALSE, fig.height=3.5, fig.width=3.5}
+```
+
+]
+
+---
+## Your Turn
+
+Capitalize the labels on the axes and the color legend, replace underscores with spaces, and add an appropriate title at the top.
+
+```{r, fig.height=4, fig.width=7}
+ggplot(penguins,
+             aes(x = flipper_length_mm,
+                 y = body_mass_g,
+                 color = island)) +
+  geom_point()
+```
+
+
+---
+## Add Transparency
+
+You can add transparency to a give geometry by setting the `alpha` level to a value between 0 (transparent) and 1 (opaque).
+
+--
+
+.pull-left[
+```{r lay-alpha, echo = TRUE, eval = FALSE}
+ggplot(mcu_films, 
+       aes(x = gross_us,
+           y = gross_world)) +
+  geom_point(alpha = .3) + #<<
+  labs(x = "Gross US",
+       y = "Gross World",
+       title = "Box office revenue of MCU films")
+```
+]
+
+--
+
+.pull-right[
+```{r ref.label="lay-alpha", echo = FALSE, eval = TRUE, fig.height=3.5, fig.width=3.5}
+```
+
+]
+
+---
+## Your Turn
+
+Add transparency to the points so that overplotting is less of an issue.
+
+```{r, fig.height=4, fig.width=7}
+ggplot(penguins,
+             aes(x = flipper_length_mm,
+                 y = body_mass_g,
+                 color = island)) +
+  geom_point()
+```
+
+
+
+---
+## Changing axis limits
+
+Consider the raw plot of the proportion of boys born over time:
+
+--
+
+```{r message = FALSE, fig.height=5}
+library(stat20data)
+data(arbuthnot)
+arbuthnot <- arbuthnot %>%
+  mutate(p_boys = boys / (boys + girls))
+ggplot(arbuthnot, aes(x = year, y = p_boys)) +
+  geom_line()
+```
+
+
+---
+## Very Impactful!
+
+Same plot, different limits.
+
+--
+
+.pull-left[
+```{r arbuthnot, eval = FALSE, echo = TRUE}
+ggplot(arbuthnot, 
+       aes(x = year, 
+           y = p_boys)) +
+  geom_line() +
+  ylim(0, 1) #<<
+```
+]
+
+--
+
+.pull-right[
+```{r ref.label = "arbuthnot", echo = FALSE}
+```
+]

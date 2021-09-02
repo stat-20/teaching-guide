@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>The Grammar of Graphics</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="STAT 20 UC Berkeley" />
+    <script src="libs/header-attrs-2.10/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# The Grammar of Graphics
+## Practice
+### STAT 20 UC Berkeley
+
+---
+
+
+
+
+---
+# Agenda
+
+Today you'll get practice applying the Grammar of Graphics framework to data using `ggplot2`.
+
+1. Practice with paper and pencil
+2. Practice with `ggplot2`
+
+???
+# Statistical Concepts
+- 
+
+# R Skills
+
+# Suggested timeline
+- [5 - 10 min] Introduce question and data using slides
+- [15 min] 
+
+# General Advice
+- Before class right the most common geom functions on the board
+  - geom_point()
+  - geom_histogram()
+  - geom_boxplot()
+  - geom_density()
+  - geom_bar()
+  - geom_line()
+
+---
+
+## Grammar of Graphics in R
+
+Wickham 2005: `ggplot2` package (inside `tidyverse`) proposes a general template:
+
+
+&lt;style type="text/css"&gt;
+.huge .remark-code { /*Change made here*/
+  font-size: 150% !important;
+}
+&lt;/style&gt;
+
+.huge[
+```
+ggplot(&lt;data&gt;) +
+    &lt;geom&gt;(&lt;aes(mapping)&gt;)
+```
+]
+
+---
+class: middle, center
+
+### First, with old technology
+
+---
+## Practice Puzzles
+
+1. Please close your computers
+1. Pull out a paper and pencil
+1. Get into pairs (or trios)
+
+You are about to be challenged with two puzzles.
+
+???
+Go around and be sure that every student is paired up, making trios where needed.
+
+---
+### MCU Films (from PS2)
+
+These three plots come from a data set called `mcu_films`. Please write out the `ggplot2` code that will produce each one.
+
+&lt;img src="02B-ggplot-slides_files/figure-html/unnamed-chunk-2-1.png" width="792" style="display: block; margin: auto;" /&gt;
+
+???
+Give ~5 minutes for this, walking around coaching students that are struggling to write anything down. As you see people with the correct answer for a particular plot, ask if they'd mind writing it on the board in a moment. Once most groups are done, ask those students who you had talked to earlier if they could please write their answers on the board.
+
+Bring up DataHub and, working purely at the console, load the tidyverse, load the openintro package, then transcribe the code on the board to answer the puzzle. Stop and ask for questions.
+
+---
+
+What do you learn from each one?
+
+&lt;img src="02B-ggplot-slides_files/figure-html/unnamed-chunk-3-1.png" width="792" style="display: block; margin: auto;" /&gt;
+
+???
+Answers will vary, but things to point out:
+
+1. Gross US earnings are right skewed. They may note approximate center and IQR / range.
+2. Same for Gross World, although it's shifted right.
+3. There is a positive linear relationship between US and World earnings.
+4. One film did notably poorer abroad than the others - which is that?
+
+---
+## Palmer Penguins
+
+These three plots come from the data set called `penguins`. Please write out the `ggplot2` code that will produce each one.
+
+&lt;img src="02B-ggplot-slides_files/figure-html/unnamed-chunk-4-1.png" width="792" style="display: block; margin: auto;" /&gt;
+
+???
+Same as the first puzzle, five ~5 minutes for this, then have the students write the correct answers on the board, which you create at the console.
+
+---
+class: middle, center
+
+### And now with computers
+
+???
+You may want to give students ~5  minutes to open their laptops, sync with DataHub, open the Lab 2B template, and fill in their answers for questions 1 and 2.
+
+---
+## Polishing plots by adding layers
+
+You can add complexity and polish to plots by adding on additional layers with `+`.
+
+1. Modifying labels
+2. Add transparency (alpha)
+3. Changing axis limits
+
+--
+
+Let's polish this up:
+
+&lt;img src="02B-ggplot-slides_files/figure-html/unnamed-chunk-5-1.png" width="216" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Modifying labels
+
+You can modify axis, legend, and plot labels by adding a `labs()` layer.
+
+--
+
+.pull-left[
+
+```r
+ggplot(mcu_films, 
+       aes(x = gross_us,
+           y = gross_world)) +
+  geom_point() +
+* labs(x = "Gross US",
+*      y = "Gross World",
+*      title = "MCU Revenue")
+```
+]
+
+--
+
+.pull-right[
+&lt;img src="02B-ggplot-slides_files/figure-html/unnamed-chunk-6-1.png" width="252" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+## Your Turn
+
+Capitalize the labels on the axes and the color legend, replace underscores with spaces, and add an appropriate title at the top.
+
+&lt;img src="02B-ggplot-slides_files/figure-html/unnamed-chunk-7-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Add Transparency
+
+You can add transparency to a give geometry by setting the `alpha` level to a value between 0 (transparent) and 1 (opaque).
+
+--
+
+.pull-left[
+
+```r
+ggplot(mcu_films, 
+       aes(x = gross_us,
+           y = gross_world)) +
+* geom_point(alpha = .3) +
+  labs(x = "Gross US",
+       y = "Gross World",
+       title = "Box office revenue of MCU films")
+```
+]
+
+--
+
+.pull-right[
+&lt;img src="02B-ggplot-slides_files/figure-html/unnamed-chunk-8-1.png" width="252" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+## Your Turn
+
+Add transparency to the points so that overplotting is less of an issue.
+
+&lt;img src="02B-ggplot-slides_files/figure-html/unnamed-chunk-9-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+## Changing axis limits
+
+Consider the raw plot of the proportion of boys born over time:
+
+--
+
+&lt;img src="02B-ggplot-slides_files/figure-html/unnamed-chunk-10-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+
+---
+## Very Impactful!
+
+Same plot, different limits.
+
+--
+
+.pull-left[
+
+```r
+ggplot(arbuthnot, 
+       aes(x = year, 
+           y = p_boys)) +
+  geom_line() +
+* ylim(0, 1)
+```
+]
+
+--
+
+.pull-right[
+&lt;img src="02B-ggplot-slides_files/figure-html/unnamed-chunk-11-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "atelier-forest-light",
+"highlightLines": true,
+"highlightSpans": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
