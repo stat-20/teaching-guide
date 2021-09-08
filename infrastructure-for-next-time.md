@@ -73,7 +73,7 @@ The following components will follow one another as ordered here during the firs
     
 **RMarkdown**
 
-1. Lecture: students are talked through the Rogoff and Reinhardt affair and walked into the conundrum that it seems that our workflow suffers from the same problem of irreproducibility. RMarkdown is presented as a solution and demo'ed.
+1. Lecture: students are talked through the Rogoff and Reinhardt affair and walked into the conundrum that it seems that our workflow suffers from the same problem of irreproducibility. RMarkdown is presented as a solution and demo'ed Underline the three tenets: show the data (library(stat20data)), show the code (library(tidyverse)), and tie conclusions to output (markdown).
 1. Lab: students work on the arbuthnot lab. Start off with slides only; not showing the students the questions.
     - The current slides are added on to replace the instruction portion of the first three questions. Each "try this" command is issued in a slide, then students do it at the console to try it out.
     - After maybe the first two questions are gone through, the GSI goes to the website to fetch the questions for the lab and demos opening up a new Rmd lab template and copying in the code that she sent to the console previously, knitting often.
