@@ -79,3 +79,17 @@ The following components will follow one another as ordered here during the firs
     - After maybe the first two questions are gone through, the GSI goes to the website to fetch the questions for the lab and demos opening up a new Rmd lab template and copying in the code that she sent to the console previously, knitting often.
     - Students are set loose to work on remaining problems, coming back together towards the end of the period.
 
+
+### Course management package
+
+A course management package could have the following functionality:
+
+1. publish content from materials repo to website repo
+2. update themes / headers (xaringan, ggplot2, website, pdf headers)
+3. create assignments from question bank
+4. crosscheck assignments for tags / learning objectives
+
+
+### Misc
+
+- Labs should be titled with the Data Set / Story, not the topic area.
