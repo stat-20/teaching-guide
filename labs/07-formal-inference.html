@@ -45,7 +45,9 @@ class: center, middle, inverse, title-slide
 
 # Board-centric approach
 
-Return to example of Mythbusters: is yawning contagious? And write out head of yawn dataset on board. Ask how to compute \hat{d} = \hat{p}_s - \hat{p}_ns using a dplyr chain. Write the chain on the board.
+If you'd like to try an approach to teaching infer that draws more on students' previous knowledge and solicits their help in reading the documentation, you're welcome to try the following. Be warned it's a higher variance pedagogy than if you just the slide deck.
+
+Return to example of gender discrimination in promotion decisions and write out head of promote dataset on board. Ask how to compute \hat{d} = \hat{p}_m - \hat{p}_f using a dplyr chain. Write the chain on the board.
 
 obs_stat &lt;- promote %&gt;%
   group_by(gender) %&gt;%
