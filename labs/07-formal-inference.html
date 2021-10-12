@@ -25,9 +25,22 @@ class: center, middle, inverse, title-slide
 
 ???
 
+# Goal
+1. Develop familiarity with the 5 core functions in `infer`: specify, hypothesize, generate, calculate, and visualize.
+
+# Time
+- [10 min] Slides: specify through generate
+- [3 min] On Your Own: facetted ggplot
+- [10 min] Slides: calculate through get_p_value
+- [20 min] Students work through `yawn` and `millenials` on their own.
+- [10 min] Discuss the millenials problem as a group, at the board and the console.
+
 # Tips
+- Have up the infer documentation page and refer to it throughout.
+- Feel free to use the board instead of slides for introducing each function.
 - Encourage students to "break the pipe" and think about whats going into each function and what's coming out. Particularly important when going through `generate()` and `calculate()`.
 - Reference back to skills from `dplyr` and `ggplot2` whereever they come up. e.g. `calculate()` is effectively group-by replicate and summarize with the statistic. `visualize()` wraps `geom_histogram()`.
+- For the millenials example, the changes: specify requires a change of variables and an inclusion of the "success" argument, hypothesis is now a point, with p = .5, and the statistic is now "prop".
 
 ---
 ## Setup: R packages
@@ -44,6 +57,10 @@ library(tidyverse)
 library(stat20data) # Data Sets
 library(infer)      # Classical Inference
 ```
+
+If you have questions about `infer`, please check:
+
+`infer.netlify.app`
 
 ---
 ## Setup: Example
