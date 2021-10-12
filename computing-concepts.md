@@ -1,16 +1,19 @@
 # First Course
 
+## basic functionality
 - R as a calculator
 - Functions
 - Arguments
-- Variable assignment
+- Printing output vs variable assignment
 - Constructing vectors of various types
 - Querying type with class
-- Chaining
+- Constructing a dataframe with tibble (to show classes)
+- Loading packages
+- Loading data
 
-- head
-- glimpse
 
+
+## ggplot2
 - ggplot
 - geom_
     - histogram
@@ -24,6 +27,7 @@
 - lims
 - theme
 
+## dplyr
 - select
 - filter
     - logical operators
@@ -32,12 +36,25 @@
 - summarize
 - group_by + summarize
 
+## stat20data
 - get_first
+
+## infer
+- specify
+- hypothesize
+- generate
+- calculate
+- visualize
+- shade_p_value
+- get_p_value
+- get_ci
+
+## linear models
+- lm
 
 
 
 # Second Course
-
-- drop_na
-- case_when
-- pivot_
+- drop_na    # dealing with missing data
+- case_when  # recoding variables
+- pivot_     # reshaping dataframes
