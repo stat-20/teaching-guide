@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Formal Inference</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="STAT 20 UC Berkeley" />
+    <script src="libs/header-attrs-2.10/header-attrs.js"></script>
+    <link href="libs/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset-0.2.6/panelset.js"></script>
+    <link rel="stylesheet" href="stat20-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Formal Inference
+### STAT 20 UC Berkeley
+
+---
+
+
+
+
+&lt;img src="figs/infer-full.jpg" width="1940" style="display: block; margin: auto;" /&gt;
+
+???
+
+# Tips
+- Encourage students to "break the pipe" and think about whats going into each function and what's coming out. Particularly important when going through `generate()` and `calculate()`.
+- Reference back to skills from `dplyr` and `ggplot2` whereever they come up. e.g. `calculate()` is effectively group-by replicate and summarize with the statistic. `visualize()` wraps `geom_histogram()`.
+
+---
+## Setup: R packages
+
+Your computing toolkit so far:
+
+--
+
+
+```r
+library(tidyverse)
+# library(ggplot2)  # Data Visualization
+# library(dplyr)    # Data Wrangling
+library(stat20data) # Data Sets
+library(infer)      # Classical Inference
+```
+
+---
+## Setup: Example
+
+**Question**: Are promotion decisions independent of the gender on the name of the application?
+
+--
+
+.pull-left[
+
+```r
+data(promote)
+promote %&gt;%
+  ggplot(aes(x = gender,
+             fill = decision)) +
+  geom_bar(position = "fill")
+```
+]
+
+--
+
+.pull-right[
+&lt;img src="07-formal-inference_files/figure-html/unnamed-chunk-3-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+
+&lt;img src="figs/infer-1.jpg" width="1940" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="figs/infer-1b.jpg" width="1940" style="display: block; margin: auto;" /&gt;
+
+
+---
+## `specify()`
+
+Specifies the response and explanatory variables and what value constitutes a "success" (where applicable).
+
+--
+
+**Question**: Are promotion decisions independent of the gender on the name of the application?
+
+--
+
+.pull-left[
+
+```r
+data(promote)
+promote
+```
+
+```
+##    id gender    decision
+## 1   1 female     promote
+## 2   2   male     promote
+## 3   3   male     promote
+## 4   4 female not promote
+## 5   5   male     promote
+## 6   6 female     promote
+## 7   7 female     promote
+## 8   8 female not promote
+## 9   9 female not promote
+## 10 10 female not promote
+## 11 11   male     promote
+## 12 12   male     promote
+## 13 13 female     promote
+## 14 14   male     promote
+## 15 15 female     promote
+## 16 16 female     promote
+## 17 17   male     promote
+## 18 18 female     promote
+## 19 19   male not promote
+## 20 20   male     promote
+## 21 21 female     promote
+## 22 22   male     promote
+## 23 23 female not promote
+## 24 24   male     promote
+## 25 25 female not promote
+## 26 26 female     promote
+## 27 27   male     promote
+## 28 28 female     promote
+## 29 29   male     promote
+## 30 30   male     promote
+## 31 31   male     promote
+## 32 32 female not promote
+## 33 33 female     promote
+## 34 34 female not promote
+## 35 35   male     promote
+## 36 36   male not promote
+## 37 37   male     promote
+## 38 38   male     promote
+## 39 39   male not promote
+## 40 40 female     promote
+## 41 41   male     promote
+## 42 42 female not promote
+## 43 43   male     promote
+## 44 44 female not promote
+## 45 45   male     promote
+## 46 46 female     promote
+## 47 47 female     promote
+## 48 48   male     promote
+```
+]
+
+--
+
+.pull-right[
+- Response = `decision`
+- Explanatory = `gender`
+]
+
+---
+
+## `specify()`, cont.
+
+
+```r
+promote %&gt;%
+  specify(response = decision,
+          explanatory = gender)
+```
+
+--
+
+
+```
+## Error: A level of the response variable `decision` needs to be specified for the `success` argument in `specify()`.
+```
+
+--
+
+
+```r
+promote %&gt;%
+  specify(response = decision,
+          explanatory = gender,
+          success = "promote")
+```
+
+--
+
+
+```
+## Response: decision (factor)
+## Explanatory: gender (factor)
+## # A tibble: 48 × 2
+##    decision    gender
+##    &lt;fct&gt;       &lt;fct&gt; 
+##  1 promote     female
+##  2 promote     male  
+##  3 promote     male  
+##  4 not promote female
+##  5 promote     male  
+##  6 promote     female
+##  7 promote     female
+##  8 not promote female
+##  9 not promote female
+## 10 not promote female
+## # … with 38 more rows
+```
+
+---
+## `specify()`, cont.
+
+Get in the habit of using R's "formula notation": `y ~ x` reads: 
+"y is explained by x".
+
+--
+
+.pull-left[
+
+```r
+promote %&gt;%
+  specify(response = decision,
+          explanatory = gender,
+          success = "promote")
+```
+
+```
+## Response: decision (factor)
+## Explanatory: gender (factor)
+## # A tibble: 48 × 2
+##    decision    gender
+##    &lt;fct&gt;       &lt;fct&gt; 
+##  1 promote     female
+##  2 promote     male  
+##  3 promote     male  
+##  4 not promote female
+##  5 promote     male  
+##  6 promote     female
+##  7 promote     female
+##  8 not promote female
+##  9 not promote female
+## 10 not promote female
+## # … with 38 more rows
+```
+]
+
+--
+
+.pull-right[
+
+```r
+promote %&gt;%
+  specify(decision ~ gender,
+          success = "promote")
+```
+
+```
+## Response: decision (factor)
+## Explanatory: gender (factor)
+## # A tibble: 48 × 2
+##    decision    gender
+##    &lt;fct&gt;       &lt;fct&gt; 
+##  1 promote     female
+##  2 promote     male  
+##  3 promote     male  
+##  4 not promote female
+##  5 promote     male  
+##  6 promote     female
+##  7 promote     female
+##  8 not promote female
+##  9 not promote female
+## 10 not promote female
+## # … with 38 more rows
+```
+]
+
+---
+
+&lt;img src="figs/infer-1.jpg" width="1940" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="figs/infer-2.jpg" width="1940" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="figs/infer-2b.jpg" width="1940" style="display: block; margin: auto;" /&gt;
+
+
+---
+## `hypothesize()`
+
+Declares a null hypothesis. Either `"independence"` or `"point"`.
+
+--
+
+**Question**: Are promotion decisions independent of the gender on the name of the application?
+
+--
+
+
+```r
+promote %&gt;%
+  specify(decision ~ gender, success = "promote") %&gt;%
+* hypothesize(null = "independence")
+```
+
+--
+
+
+```
+## Response: decision (factor)
+## Explanatory: gender (factor)
+## Null Hypothesis: independence
+## # A tibble: 48 × 2
+##    decision    gender
+##    &lt;fct&gt;       &lt;fct&gt; 
+##  1 promote     female
+##  2 promote     male  
+##  3 promote     male  
+##  4 not promote female
+##  5 promote     male  
+##  6 promote     female
+##  7 promote     female
+##  8 not promote female
+##  9 not promote female
+## 10 not promote female
+## # … with 38 more rows
+```
+
+---
+
+&lt;img src="figs/infer-2.jpg" width="1940" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="figs/infer-3.jpg" width="1940" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="figs/infer-3b.jpg" width="1940" style="display: block; margin: auto;" /&gt;
+
+---
+## `generate()`
+
+Generates `reps` replicates of the kind of data you would observe if the null hypothesis was true either via `permute` or `draw`.
+
+--
+
+
+```r
+promote %&gt;%
+  specify(decision ~ gender, success = "promote") %&gt;%
+  hypothesize(null = "independence") %&gt;%
+* generate(reps = 1, type = "permute")
+```
+
+--
+
+
+```
+## Response: decision (factor)
+## Explanatory: gender (factor)
+## Null Hypothesis: independence
+## # A tibble: 48 × 3
+## # Groups:   replicate [1]
+##    decision    gender replicate
+##    &lt;fct&gt;       &lt;fct&gt;      &lt;int&gt;
+##  1 promote     female         1
+##  2 promote     male           1
+##  3 not promote male           1
+##  4 not promote female         1
+##  5 not promote male           1
+##  6 promote     female         1
+##  7 not promote female         1
+##  8 promote     female         1
+##  9 promote     female         1
+## 10 promote     female         1
+## # … with 38 more rows
+```
+
+???
+
+NB: keep an eye on data frame dimensions before and after `generate()`.
+
+---
+## `generate()`, cont.
+
+What does the data look like when the null is true? One look:
+
+---
+
+.panelset[
+
+.panel[.panel-name[Observed Data]
+&lt;img src="07-formal-inference_files/figure-html/unnamed-chunk-19-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+
+```r
+promote %&gt;%
+  ggplot(aes(x = gender,
+             fill = decision)) +
+  geom_bar(position = "fill")
+```
+]
+
+.panel[.panel-name[Permuted Data]
+&lt;img src="07-formal-inference_files/figure-html/unnamed-chunk-20-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+
+```r
+promote %&gt;%
+* specify(decision ~ gender, success = "promote") %&gt;%
+* hypothesize(null = "independence") %&gt;%
+* generate(reps = 1, type = "permute") %&gt;%
+  ggplot(aes(x = gender,
+             fill = decision)) +
+  geom_bar(position = "fill")
+```
+]
+]
+
+---
+class: inverse
+
+## Your turn
+
+
+```r
+promote %&gt;%
+  specify(decision ~ gender, success = "promote") %&gt;%
+  hypothesize(null = "independence") %&gt;%
+  generate(reps = 1, type = "permute") %&gt;%
+  ggplot(aes(x = gender,
+             fill = decision)) +
+  geom_bar(position = "fill")
+```
+
+.task[
+Modify the code above to create a visualization with _9 subplots_, each showing different examples of the sort of data you would see in a world where this null hypothesis is true.
+]
+
+---
+
+&lt;img src="figs/infer-3.jpg" width="1940" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="figs/infer-4.jpg" width="1940" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="figs/infer-4b.jpg" width="1940" style="display: block; margin: auto;" /&gt;
+
+---
+## `calculate()`
+
+Calculates a test statistic for each generated data set.
+
+
+```r
+promote %&gt;%
+  specify(decision ~ gender, success = "promote") %&gt;%
+  hypothesize(null = "independence") %&gt;%
+  generate(reps = 9, type = "permute") %&gt;%
+* calculate(stat = "diff in props",
+*           order = c("male", "female"))
+```
+
+--
+
+
+```
+## Response: decision (factor)
+## Explanatory: gender (factor)
+## Null Hypothesis: independence
+## # A tibble: 9 × 2
+##   replicate    stat
+##       &lt;int&gt;   &lt;dbl&gt;
+## 1         1 -0.0417
+## 2         2 -0.0417
+## 3         3  0.125 
+## 4         4 -0.125 
+## 5         5  0.125 
+## 6         6 -0.125 
+## 7         7 -0.0417
+## 8         8  0.208 
+## 9         9  0.0417
+```
+
+???
+NB: keep an eye on data frame dimensions before and after `calculate()`.
+
+---
+
+&lt;img src="figs/infer-4.jpg" width="1940" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="figs/infer-5.jpg" width="1940" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="figs/infer-5b.jpg" width="1940" style="display: block; margin: auto;" /&gt;
+
+---
+## `visualize()`
+
+Visualizes the distribution of the test statistics under the null hypothesis.
+
+--
+
+
+```r
+promote %&gt;%
+  specify(decision ~ gender, success = "promote") %&gt;%
+  hypothesize(null = "independence") %&gt;%
+  generate(reps = 9, type = "permute") %&gt;%
+  calculate(stat = "diff in props",
+            order = c("male", "female")) %&gt;%
+* visualize()
+```
+
+--
+
+&lt;img src="07-formal-inference_files/figure-html/unnamed-chunk-29-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+---
+class: center, middle, inverse
+
+## What will happen if we increase reps to 500?
+
+---
+
+
+```r
+promote %&gt;%
+  specify(decision ~ gender, success = "promote") %&gt;%
+  hypothesize(null = "independence") %&gt;%
+* generate(reps = 500, type = "permute") %&gt;%
+  calculate(stat = "diff in props",
+            order = c("male", "female")) %&gt;%
+  visualize()
+```
+
+--
+
+&lt;img src="07-formal-inference_files/figure-html/unnamed-chunk-30-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+--
+
+&gt; As a rule of thumb, 500 replicates is sufficient to get a smooth null distribution and a precise p-value.
+
+---
+## Visualizing the obs. stat
+
+You can compute your _observed_ statistic by removing the parts of the pipeline that don't apply.
+
+--
+
+
+```r
+obs_stat &lt;- promote %&gt;%
+  specify(decision ~ gender, success = "promote") %&gt;%
+  # hypothesize(null = "independence") %&gt;%
+  # generate(reps = 500, type = "permute") %&gt;%
+  calculate(stat = "diff in props",
+            order = c("male", "female"))
+obs_stat
+```
+
+--
+
+
+```
+## Response: decision (factor)
+## Explanatory: gender (factor)
+## # A tibble: 1 × 1
+##    stat
+##   &lt;dbl&gt;
+## 1 0.292
+```
+
+---
+## Visualizing the obs. stat, cont.
+
+Let's save the null distribution of test statistics.
+
+--
+
+
+```r
+null &lt;- promote %&gt;%
+  specify(decision ~ gender, success = "promote") %&gt;%
+  hypothesize(null = "independence") %&gt;%
+  generate(reps = 500, type = "permute") %&gt;%
+  calculate(stat = "diff in props",
+            order = c("male", "female"))
+null
+```
+
+--
+
+
+```
+## Response: decision (factor)
+## Explanatory: gender (factor)
+## Null Hypothesis: independence
+## # A tibble: 500 × 2
+##    replicate    stat
+##        &lt;int&gt;   &lt;dbl&gt;
+##  1         1  0.125 
+##  2         2 -0.125 
+##  3         3  0.0417
+##  4         4  0.0417
+##  5         5  0.125 
+##  6         6  0.0417
+##  7         7 -0.0417
+##  8         8 -0.0417
+##  9         9  0.125 
+## 10        10  0.0417
+## # … with 490 more rows
+```
+
+---
+## Visualizing the obs. stat, cont.
+
+Let's visualize the `obs_stat` in the `null` by adding a layer to the ggplot.
+
+--
+
+
+```r
+null %&gt;%
+  visualize() +
+  shade_p_value(obs_stat, direction = "both")
+```
+
+--
+
+&lt;img src="07-formal-inference_files/figure-html/unnamed-chunk-33-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+---
+## Getting a p-value
+
+You can return the p-value using `get_p_value()`.
+
+
+```r
+null %&gt;%
+  get_p_value(obs_stat, direction = "both")
+```
+
+--
+
+
+```
+## # A tibble: 1 × 1
+##   p_value
+##     &lt;dbl&gt;
+## 1   0.044
+```
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "atelier-forest-light",
+"highlightLines": true,
+"highlightSpans": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
