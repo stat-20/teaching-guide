@@ -8,19 +8,23 @@
 - Practice can be done solo or in groups, facilitated by course
 
 ### Course staff experience
-- TAs facilitate well-designed lesson plans
+- TAs facilitate well-designed lesson plans that emphasize discussion and tactile activities
 - TAs attend lecture to maintain storyline of course
 - TAs grade the assignments of their students
 
 ### Instructor experience
-- Modular and version controlled materials allow for modification 
+- Modular and version controlled materials allow for modification
 
 ## Grading
-30\% Labs
-30%\% Quizzes
-20\% Midterm
+35% Labs
+40% Quizzes
+25% Final
 
 ## TA time budget
-- 3 hrs lecture
-- 2 hrs lab
-- 
+- 4 hrs lab section
+- 2 hrs solo prep
+- 1 hr rotating: attend/facilitate lecture
+- 2 hrs staff meeting
+- 4 hrs OH
+- 2 hrs Ed
+- 4 hr assorted tasks
