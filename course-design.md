@@ -14,6 +14,22 @@
 
 ### Instructor experience
 - Modular and version controlled materials allow for modification
+- Responsibilities
+    - Content
+    - Design
+    - Managing staff
+    
+## Lab
+- Tu, Thu 50 minutes, ~25 students + GSI
+- Lab assignment
+    - Part I: paper and pencil
+    - Part II: computer
+    - Part III: on your own
+
+## Lecture
+- 50 min in smallish lecture hall
+- Mostly in chalk
+- At least one PI style Q in each
 
 ## Grading
 35% Labs
