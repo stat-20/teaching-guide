@@ -10,6 +10,15 @@
 - Constructing a dataframe with tibble (to show classes)
 - Loading packages
 - Loading data
+- Getting help (?, online documentation, posting on Ed)
+
+- mean
+- sum
+- sqrt
+- abs
+- nrow
+- log
+- exponents
 
 ## rmarkdown
 - Difference between console and Rmd environments
@@ -35,6 +44,7 @@
 
 ## dplyr
 - select
+- count
 - filter
     - logical operators
 - arrange
@@ -78,3 +88,8 @@
     3. dplyr
     4. infer
 
+* * *
+
+# Random computing resources
+- tidy data tutor: https://tidydatatutor.com/
+- fix leaky pipes in R: https://www.rostrum.blog/2019/04/07/fix-leaky-pipes/
